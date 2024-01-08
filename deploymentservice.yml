@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: nodeserver
-        image: thetips4you/nodeapp:latest
+        image: 866762610186.dkr.ecr.us-east-1.amazonaws.com/kube-node:v1
         ports:
         - containerPort: 3000
         
