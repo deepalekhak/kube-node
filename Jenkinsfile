@@ -11,7 +11,8 @@ pipeline {
     stages {
         stage('Checkout Source') {
             steps {
-                git 'https://github.com/deepalekhak/kube-node.git'
+                sh 'echo passed'
+                //git branch: 'main' url: 'https://github.com/deepalekhak/kube-node.git'
             }
         }
 
