@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Checkout Source') {
             steps {
-              sh 'echo passed'
+                sh 'echo passed'
                 //git branch: 'main', url: 'https://github.com/deepalekhak/kube-node.git'
             }
         }
@@ -30,9 +30,10 @@ pipeline {
                     withCredentials([string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
                                      string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')]) {
                         sh "aws ecr get-login-password --region ${awsRegion} | docker login --username AWS --password-stdin ${awsAccountId}.dkr.ecr.${awsRegion}.amazonaws.com"
-                        dockerImage.tag("${awsAccountId}.dkr.ecr.${awsRegion}.amazonaws.com/${ecrRepository}:latest")
+                        def ecrTaggedImage = "${awsAccountId}.dkr.ecr.${awsRegion}.amazonaws.com/${ecrRepository}:latest"
+                        dockerImage.tag(ecrTaggedImage)
                         docker.withRegistry("${awsAccountId}.dkr.ecr.${awsRegion}.amazonaws.com", 'ecr:latest') {
-                            dockerImage.push("latest")
+                            dockerImage.push(ecrTaggedImage)
                         }
                     }
                 }
