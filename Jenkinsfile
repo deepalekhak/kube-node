@@ -47,10 +47,10 @@ pipeline {
             }
         }
 
-        stage('Deploy App to Kubernetes') {
+        stage('Deploy App to K8s') {
             steps {
                 script {
-                    kubernetesDeploy(configs: "deploymentservice.yml", kubeconfigId: "kubernetes")
+                 sh 'kubectl apply -f deployment.yml'
                 }
             }
         }
