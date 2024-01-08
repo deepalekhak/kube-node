@@ -11,8 +11,8 @@ pipeline {
     stages {
         stage('Checkout Source') {
             steps {
-                sh 'echo passed'
-                //git branch: 'main' url: 'https://github.com/deepalekhak/kube-node.git'
+              sh 'echo passed'
+                //git branch: 'main', url: 'https://github.com/deepalekhak/kube-node.git'
             }
         }
 
@@ -20,19 +20,6 @@ pipeline {
             steps {
                 script {
                     dockerImage = docker.build dockerImageName
-                }
-            }
-        }
-
-        stage('Push Image to Docker Hub') {
-            environment {
-                registryCredential = 'dockerhublogin'
-            }
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
-                        dockerImage.push("latest")
-                    }
                 }
             }
         }
