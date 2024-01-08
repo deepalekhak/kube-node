@@ -50,7 +50,7 @@ pipeline {
         stage('Deploy App to K8s') {
             steps {
                 script {
-                 sh 'kubectl apply -f deployment.yml'
+                 sudo sh ' kubectl apply -f deployment.yml'
                 }
             }
         }
