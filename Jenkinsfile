@@ -53,10 +53,10 @@ pipeline {
             steps {
                 script {
                     // Use AWS credentials for this stage
-            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-credentials-id', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                    // Update kubeconfig for the specified EKS cluster
+                withCredentials([string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
+                                 string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')]) {
                     sh "aws eks update-kubeconfig --region ${AWS_DEFAULT_REGION} --name ${EKS_CLUSTER_NAME} --kubeconfig ${KUBE_CONFIG}"
-
+                    
                     // Configure kubectl with the updated kubeconfig file path
                     sh "export KUBECONFIG=${KUBE_CONFIG}"
 
@@ -67,4 +67,4 @@ pipeline {
             }
         }
     }
-}
+}    
