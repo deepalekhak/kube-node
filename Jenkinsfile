@@ -34,8 +34,8 @@ pipeline {
                     withCredentials([string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
                                      string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')]) {
                         sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-                    }
-                }       
+                    }       
+                }
             }
         }
 
@@ -49,12 +49,20 @@ pipeline {
             }
         }
 
-        stage('Deploy App to K8s') {
+        stage('Deploy to Kubernetes') {
             steps {
                 script {
-                 sh "aws eks update-kubeconfig --region ${AWS_DEFAULT_REGION} --name ${EKS_CLUSTER_NAME} --kubeconfig ${KUBE_CONFIG}"
-                 sh "export KUBECONFIG=${KUBE_CONFIG}"  
-                 sh 'kubectl apply -f deployment.yml'
+                    // Use AWS credentials for this stage
+            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-credentials-id', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+                    // Update kubeconfig for the specified EKS cluster
+                    sh "aws eks update-kubeconfig --region ${AWS_DEFAULT_REGION} --name ${EKS_CLUSTER_NAME} --kubeconfig ${KUBE_CONFIG}"
+
+                    // Configure kubectl with the updated kubeconfig file path
+                    sh "export KUBECONFIG=${KUBE_CONFIG}"
+
+                    // Replace 'your-deployment.yaml' with the actual path or name of your Kubernetes deployment YAML file
+                    sh "kubectl apply -f deployment.yaml"
+                    }
                 }
             }
         }
