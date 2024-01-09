@@ -6,7 +6,7 @@ pipeline {
         IMAGE_TAG = "v1"              // Replace with your desired image tag
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
         dockerImageName = "thetips4you/nodeapp"
-        EKS_CLUSTER_NAME = “my-cluster"
+        EKS_CLUSTER_NAME = "my-cluster"
         KUBE_CONFIG = "${JENKINS_HOME}/.kube/config"
     }
 
