@@ -13,6 +13,8 @@ pipeline {
 
     agent any
 
+    tools {nodejs "node"}
+
     stages {
         stage('Checkout Source') {
             steps {
@@ -23,7 +25,7 @@ pipeline {
         stage('Build and Test') {
             steps {
                 container("node:${NODEJS_VERSION}") {
-                    sh 'npm install'
+                    sh 'npm install && node test'
                 }
             }
         }
