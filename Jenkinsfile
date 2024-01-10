@@ -1,4 +1,4 @@
-pipeline {
+vicpipeline {
     environment {
         AWS_DEFAULT_REGION = "us-east-1"  // Replace with your actual AWS region
         AWS_ACCOUNT_ID = "866762610186"   // Replace with your actual AWS account ID
@@ -61,7 +61,7 @@ pipeline {
                     sh "export KUBECONFIG=${KUBE_CONFIG}"
 
                     // Replace 'your-deployment.yaml' with the actual path or name of your Kubernetes deployment YAML file
-                    sh "kubectl -n web-app apply -f deployment.yml"
+                    sh "kubectl -n web-app apply -f deploymentservice.yml"
                     }
                 }
             }
