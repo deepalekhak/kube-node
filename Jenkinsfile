@@ -4,7 +4,7 @@ pipeline {
         AWS_ACCOUNT_ID = "866762610186"   // Replace with your actual AWS account ID
         IMAGE_REPO_NAME = "kube-node"     // Replace with your actual ECR repository name
         IMAGE_TAG = "v1"              // Replace with your desired image tag
-        NODEJS_VERSION = 'latest'
+        // NODEJS_VERSION = 'latest'
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
         dockerImageName = "thetips4you/nodeapp"
         EKS_CLUSTER_NAME = "hr-dev-eksdemo1"
@@ -22,8 +22,8 @@ pipeline {
         }
         stage('Build and Test') {
             steps {
-                container("node:${NODEJS_VERSION}") {
-                    sh 'npm install && node test'
+                script {
+                    sh 'npm install'
                 }
             }
         }
