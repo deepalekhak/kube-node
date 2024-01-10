@@ -3,8 +3,7 @@ pipeline {
         AWS_DEFAULT_REGION = "us-east-1"  // Replace with your actual AWS region
         AWS_ACCOUNT_ID = "866762610186"   // Replace with your actual AWS account ID
         IMAGE_REPO_NAME = "kube-node"     // Replace with your actual ECR repository name
-        IMAGE_TAG = "v1"
-        NODEJS_VERSION = 'latest'              
+        IMAGE_TAG = "v1"              // Replace with your desired image tag
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
         dockerImageName = "thetips4you/nodeapp"
         EKS_CLUSTER_NAME = "hr-dev-eksdemo1"
@@ -20,10 +19,9 @@ pipeline {
                 //git branch: 'main', url: 'https://github.com/deepalekhak/kube-node.git'
             }
         }
-
         stage('Build and Test') {
             steps {
-                container("node:${NODEJS_VERSION}") {
+                script {
                     sh 'npm install'
                 }
             }
@@ -32,11 +30,10 @@ pipeline {
         stage('Build Image') {
             steps {
                 script {
-                    dockerImage = docker.build("${dockerImageName}:${IMAGE_TAG}", "--build-arg NODEJS_VERSION=${NODEJS_VERSION} .")
+                    dockerImage = docker.build dockerImageName
                 }
             }
         }
-
 
         stage('Logging into AWS ECR') {
             steps {
@@ -58,15 +55,6 @@ pipeline {
                 }
             }
         }
-
-        stage('Cleanup Local Images') {
-            steps {
-                script {
-                    sh "docker image prune -f"
-                }
-            }
-        }
-
 
         stage('Deploy to Kubernetes') {
             steps {
