@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Build and Test') {
             steps {
-                script {
+                container("node:${NODEJS_VERSION}") {
                     sh 'npm install'
                 }
             }
