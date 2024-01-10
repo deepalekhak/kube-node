@@ -1,4 +1,4 @@
-vicpipeline {
+pipeline {
     environment {
         AWS_DEFAULT_REGION = "us-east-1"  // Replace with your actual AWS region
         AWS_ACCOUNT_ID = "866762610186"   // Replace with your actual AWS account ID
@@ -6,7 +6,7 @@ vicpipeline {
         IMAGE_TAG = "v1"              // Replace with your desired image tag
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
         dockerImageName = "thetips4you/nodeapp"
-        EKS_CLUSTER_NAME = "my-cluster"
+        EKS_CLUSTER_NAME = "eks-dev"
         KUBE_CONFIG = "${JENKINS_HOME}/.kube/config"
     }
 
@@ -61,7 +61,7 @@ vicpipeline {
                     sh "export KUBECONFIG=${KUBE_CONFIG}"
 
                     // Replace 'your-deployment.yaml' with the actual path or name of your Kubernetes deployment YAML file
-                    sh "kubectl -n web-app apply -f deploymentservice.yml"
+                    sh "kubectl apply -f deploymentservice.yml -n web-app"
                     }
                 }
             }
