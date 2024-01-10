@@ -3,10 +3,11 @@ pipeline {
         AWS_DEFAULT_REGION = "us-east-1"  // Replace with your actual AWS region
         AWS_ACCOUNT_ID = "866762610186"   // Replace with your actual AWS account ID
         IMAGE_REPO_NAME = "kube-node"     // Replace with your actual ECR repository name
-        IMAGE_TAG = "v1"              // Replace with your desired image tag
+        IMAGE_TAG = "v1"
+        NODEJS_VERSION = 'latest'              
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
         dockerImageName = "thetips4you/nodeapp"
-        EKS_CLUSTER_NAME = "hr-dev-eksdemo1"
+        EKS_CLUSTER_NAME = "my-cluster"
         KUBE_CONFIG = "${JENKINS_HOME}/.kube/config"
     }
 
@@ -20,13 +21,22 @@ pipeline {
             }
         }
 
-        stage('Build Image') {
+        stage('Build and Test') {
             steps {
-                script {
-                    dockerImage = docker.build dockerImageName
+                container("node:${NODEJS_VERSION}") {
+                    sh 'npm install'
                 }
             }
         }
+
+        stage('Build Image') {
+            steps {
+                script {
+                    dockerImage = docker.build("${dockerImageName}:${IMAGE_TAG}", "--build-arg NODEJS_VERSION=${NODEJS_VERSION} .")
+                }
+            }
+        }
+
 
         stage('Logging into AWS ECR') {
             steps {
@@ -49,6 +59,15 @@ pipeline {
             }
         }
 
+        stage('Cleanup Local Images') {
+            steps {
+                script {
+                    sh "docker image prune -f"
+                }
+            }
+        }
+
+
         stage('Deploy to Kubernetes') {
             steps {
                 script {
@@ -61,7 +80,7 @@ pipeline {
                     sh "export KUBECONFIG=${KUBE_CONFIG}"
 
                     // Replace 'your-deployment.yaml' with the actual path or name of your Kubernetes deployment YAML file
-                    sh "kubectl apply -f deploymentservice.yml"
+                    sh "kubectl apply -f deployment.yaml -n web-app"
                     }
                 }
             }
