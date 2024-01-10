@@ -20,13 +20,13 @@ pipeline {
                 //git branch: 'main', url: 'https://github.com/deepalekhak/kube-node.git'
             }
         }
-        stage('Build and Test') {
-            steps {
-                script {
-                    sh 'npm install'
-                }
-            }
-        }
+        //stage('Build and Test') {
+         //   steps {
+          //      script {
+          //          sh 'npm install'
+          //      }
+        //    }
+     //   }
 
         stage('Build Image') {
             steps {
