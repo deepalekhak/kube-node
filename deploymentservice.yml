@@ -36,3 +36,35 @@ spec:
     port: 5000
     targetPort: 3000
     nodePort: 31110
+
+---
+
+# Annotations Reference: https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/ingress/annotations/
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: alb-ingress-eks
+  labels:
+    app: nodeapp
+  annotations:
+    kubernetes.io/ingress.class: alb
+    # Load Balancer Name
+    alb.ingress.kubernetes.io/load-balancer-name: alb-ingress-eks
+    #kubernetes.io/ingress.class: "alb" (OLD INGRESS CLASS NOTATION - STILL WORKS BUT RECOMMENDED TO USE IngressClass Resource) # Additional Notes: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.3/guide/ingress/ingress_class/#deprecated-kubernetesioingressclass-annotation
+    # Ingress Core Settings
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    # Health Check Settings
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP 
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/healthcheck-path: /    
+spec:
+  ingressClassName: alb # Ingress Class
+  defaultBackend:
+    service:
+      name: nodeapp-service
+      port:
+        number: 80                  
+      
+
+# 1. If  "spec.ingressClassName: my-aws-ingress-class" not specified, will reference default ingress class on this kubernetes cluster
+# 2. Default Ingress class is nothing but for which ingress class we have the annotation `ingressclass.kubernetes.io/is-default-class: "true"`
