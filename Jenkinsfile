@@ -69,7 +69,7 @@ pipeline {
                     sh "export KUBECONFIG=${KUBE_CONFIG}"
 
                     // Replace 'your-deployment.yaml' with the actual path or name of your Kubernetes deployment YAML file
-                    sh "kubectl apply -f deploymentservice.yml -n eks-dev"
+                    sh "kubectl apply -f deploymentservice.yml"
                     }
                 }
             }
