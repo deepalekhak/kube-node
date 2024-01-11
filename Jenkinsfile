@@ -7,7 +7,7 @@ pipeline {
         // NODEJS_VERSION = 'latest'
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
         dockerImageName = "thetips4you/nodeapp"
-        EKS_CLUSTER_NAME = "eks-dev"
+        EKS_CLUSTER_NAME = "eks-dev-cluster01"
         KUBE_CONFIG = "${JENKINS_HOME}/.kube/config"
     }
 
