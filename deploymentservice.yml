@@ -49,8 +49,8 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: alb
     # Load Balancer Name
-    #alb.ingress.kubernetes.io/load-balancer-name: alb-ingress-eks
-    kubernetes.io/ingress.class: "alb" 
+    alb.ingress.kubernetes.io/load-balancer-name: alb-ingress-eks
+    #kubernetes.io/ingress.class: "alb" 
     #(OLD INGRESS CLASS NOTATION - STILL WORKS BUT RECOMMENDED TO USE IngressClass Resource) # Additional Notes: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.3/guide/ingress/ingress_class/#deprecated-kubernetesioingressclass-annotation
     # Ingress Core Settings
     alb.ingress.kubernetes.io/scheme: internet-facing
